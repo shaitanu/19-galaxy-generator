@@ -27,7 +27,8 @@ const parameters = {
     randomness: 0.2,
     randomnessPower: 3,
     insideColor: '#ff6030',
-    outsideColor: '#1b3984'
+    outsideColor: '#1b3984',
+    speed: 0.1
 }
 
 let geometry = null
@@ -81,6 +82,8 @@ const generateGalaxy = () =>{
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
 
+    geometry.computeBoundingBox()
+    geometry.center(); 
     /**
      * Material
      */
@@ -97,7 +100,7 @@ const generateGalaxy = () =>{
      *  Points
         */
     points = new THREE.Points(geometry, material)
-    points.rotation.x=Math.PI/8
+    points.rotation.x = Math.PI/8
     scene.add(points)
 
 }
@@ -112,6 +115,7 @@ gui.add(parameters, 'randomness').min(0).max(2).step(0.001).onFinishChange(gener
 gui.add(parameters, 'randomnessPower').min(1).max(10).step(0.001).onFinishChange(generateGalaxy) 
 gui.addColor(parameters, 'insideColor').onFinishChange(generateGalaxy)
 gui.addColor(parameters, 'outsideColor').onFinishChange(generateGalaxy)
+gui.add(parameters, 'speed').min(-0.5).max(0.5).step(0.001)
 /**
  * Sizes
  */
@@ -164,13 +168,12 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Animate
  */
 const clock = new THREE.Clock()
-
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
 
     //Update points
-    points.rotation.y = elapsedTime * 0.1
+    points.rotation.y = elapsedTime * parameters.speed
 
     // Update controls
     controls.update()
