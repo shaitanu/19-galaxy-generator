@@ -22,7 +22,7 @@ const parameters = {
     count: 100000,
     size: 0.02,
     radius: 5,
-    branches: 6 ,
+    branches: 12,
     spin: 1,
     randomness: 0.2,
     randomnessPower: 3,
@@ -97,10 +97,10 @@ const generateGalaxy = () =>{
      *  Points
         */
     points = new THREE.Points(geometry, material)
+    points.rotation.x=Math.PI/8
     scene.add(points)
 
 }
-
 generateGalaxy()
 
 gui.add(parameters, 'count').min(100).max(1000000).step(100).onFinishChange(generateGalaxy)
@@ -171,7 +171,7 @@ const tick = () =>
 
     //Update points
     points.rotation.y = elapsedTime * 0.1
-    
+
     // Update controls
     controls.update()
 
